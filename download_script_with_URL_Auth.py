@@ -35,7 +35,7 @@ def main(session_id, base_url, directory_endpoint, local_storage_path, proxy_dic
         download_file(session, file_url, local_path)
 
 if __name__ == "__main__":
-    SESSION_ID = 'your-session-id-here'  # Replace with your actual session ID
+    SESSION_ID = 'LPfc9aZz2pTkYtM0t3U2fR1_Yx58V0mH6'  # Replace with your actual session ID
     BASE_URL = 'https://cloud.bcmi.sjtu.edu.cn/sharing/R80Mk1n2v'
     DIRECTORY_ENDPOINT = '/api/files'  # Adjust as per actual API endpoint that lists files
     LOCAL_STORAGE_PATH = '/path/to/your/local/directory'
