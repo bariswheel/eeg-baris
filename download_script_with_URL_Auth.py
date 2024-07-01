@@ -14,33 +14,25 @@ def download_file(session, url, save_path):
         print(f"Failed to download {url}, Status Code: {response.status_code}")
         print(response.text)  # Logging the response body for more context on the error
 
-def list_directory_contents(session, url):
-    """Lists the contents of a directory via an API call."""
-    print(f"Fetching directory contents from URL: {url}")  # Logging URL access attempt
-    response = session.get(url)
-    if response.status_code == 200:
-        return response.json()  # Assuming the API returns a list of items in JSON format
-    else:
-        print("Failed to fetch directory contents")
-        print(f"Status Code: {response.status_code}")  # Log the status code
-        print(response.text)  # Log the response body for more context on the error
-        return []
-
-def main(session_id, base_url, file_paths, local_storage_path):
+def main(session_id, file_urls, local_storage_path):
     """Main function to handle downloading files directly."""
     session = requests.Session()
-    session.headers.update({'Cookie': f'session_id={session_id}'})  # Authentication via session ID
+    session.headers.update({
+        'Cookie': f'session_id={session_id}',  # Ensure this is the correct way to authenticate
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+    })
 
-    for file_path in file_paths:
-        full_url = f"{base_url}/{file_path}"  # Construct the full URL to the file
-        local_file_path = os.path.join(local_storage_path, os.path.basename(file_path))
+    for url in file_urls:
+        local_file_path = os.path.join(local_storage_path, os.path.basename(url))
         os.makedirs(os.path.dirname(local_file_path), exist_ok=True)
-        download_file(session, full_url, local_file_path)
+        download_file(session, url, local_file_path)
 
 if __name__ == "__main__":
     SESSION_ID = 'LPfc9aZz2pTkYtM0t3U2fR1_Yx58V0mH6'
-    BASE_URL = 'https://cloud.bcmi.sjtu.edu.cn/sharing/R80Mk1n2v'
-    FILE_PATHS = ['SEED_EEG/SEED_EEG.zip', 'SEED_Multimodal/SEED.zip']  # Direct paths to the files
+    FILE_URLS = [
+        'https://cloud.bcmi.sjtu.edu.cn/fsdownload/webapi/file_download.cgi/SEED_EEG.zip',
+        'https://cloud.bcmi.sjtu.edu.cn/fsdownload/webapi/file_download.cgi/SEED.zip'
+    ]
     LOCAL_STORAGE_PATH = '/Users/baris/Downloads/SEED'
 
-    main(SESSION_ID, BASE_URL, FILE_PATHS, LOCAL_STORAGE_PATH)
+    main(SESSION_ID, FILE_URLS, LOCAL_STORAGE_PATH)
